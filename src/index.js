@@ -31,6 +31,14 @@ class App extends React.Component {
     }, 1000);
   }
 
+  checkListMessages = () => {
+    setInterval(() => {
+      this.state.listUsers.forEach((user) => {
+        this.createDirectMessageChat(user.username);
+      }); 
+    }, 1000);
+  }
+
   callApiLogin = (e) => {
     e.preventDefault();
     fetch("http://tower01-it-d:3002/api/v1/login", {
@@ -53,6 +61,7 @@ class App extends React.Component {
         () => {
           this.callApiListUser();
           this.checkChat();
+          //this.checkListMessages();
           launchWebSocket(responseJson.data.authToken);
         })
       })

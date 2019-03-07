@@ -2,60 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { ChatPreview, SendBox, SearchBox, Message } from "@revh/lab-chat";
 import "./styles.css";
-
-
-const wsUri = "ws://tower01-it-d:3002/websocket";
-var websocket;
-let sendProgr = 1;
-var sendAuthToken;
-function launchWebSocket(authToken) {
-  sendAuthToken = authToken;
-  websocket = new WebSocket(wsUri);
-  websocket.onopen = function(evt) { onOpen(evt) };
-  // websocket.onclose = function(evt) { onClose(evt) };
-  websocket.onmessage = function(evt) { onMessage(evt) };
-  // websocket.onerror = function(evt) { onError(evt) };
-}
-
-function doSend(message){
-  websocket.send(message);
-}
-
-function onOpen(evt) {
-  var connect = {
-    "msg": "connect",
-    "version": "1",
-    "support": ["1"]
-  };
-  var login = {
-    "msg": "method",
-    "method": "login",
-    "params": [
-      {
-        "resume": sendAuthToken
-      }
-    ],
-    "id": ""+sendProgr++
-  };
-
-  doSend(JSON.stringify(connect));
-  doSend(JSON.stringify(login));
-}
-
-function onMessage(evt) {
-  console.log(evt);
-  const message = JSON.parse(evt.data);
-  if(message.msg === 'ping') {
-    doSend(JSON.stringify({ "msg": "pong"}))
-  }
-}
+import launchWebSocket from "./helpers/websocket";
 
 
 class App extends React.Component {
   state = {
     messageValue: '',
     authToken: '',
-    userID: '',
+    userId: '',
     user: '',
     username: '',
     password: '',
@@ -77,8 +31,6 @@ class App extends React.Component {
     }, 1000);
   }
 
-
-
   callApiLogin = (e) => {
     e.preventDefault();
     fetch("http://tower01-it-d:3002/api/v1/login", {
@@ -93,10 +45,9 @@ class App extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
         this.setState({
           authToken : responseJson.data.authToken,
-          userID : responseJson.data.userId,
+          userId : responseJson.data.userId,
           user: responseJson.data.me.username
         },
         () => {
@@ -104,9 +55,6 @@ class App extends React.Component {
           this.checkChat();
           launchWebSocket(responseJson.data.authToken);
         })
-        
-        
-        
       })
       .catch(error => {
         console.log(error);
@@ -119,12 +67,11 @@ class App extends React.Component {
       headers: {
         "Content-Type": "application/json",
         "X-Auth-Token": this.state.authToken,
-        "X-User-Id": this.state.userID
+        "X-User-Id": this.state.userId
       }
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
         this.setState({
           listUsers: responseJson.users
         })
@@ -143,13 +90,12 @@ class App extends React.Component {
     this.setState({
       messageValue : ''
     })
-    //alert(msgVal);
     fetch("http://tower01-it-d:3002/api/v1/chat.postMessage", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "X-Auth-Token": this.state.authToken,
-        "X-User-Id": this.state.userID
+        "X-User-Id": this.state.userId
       },
       body: JSON.stringify({
         roomId: this.state.activeRoom,
@@ -158,9 +104,8 @@ class App extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
-        //this.callApiDirectMessageList(this.state.activeUser.username);
-        this.callApiRoomMessages(this.state.activeUser.username)
+        this.callApiRoomMessages(this.state.activeUser.username);
+        this.createDirectMessageChat(this.state.activeUser.username);
       })
       .catch(error => {
         console.log(error);
@@ -173,12 +118,11 @@ class App extends React.Component {
       headers: {
         "Content-Type": "application/json",
         "X-Auth-Token": this.state.authToken,
-        "X-User-Id": this.state.userID
+        "X-User-Id": this.state.userId
       }
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
         this.setState(prevState => ({
           rooms: {
             ...prevState.rooms,
@@ -200,7 +144,7 @@ class App extends React.Component {
       headers: {
         "Content-Type": "application/json",
         "X-Auth-Token": this.state.authToken,
-        "X-User-Id": this.state.userID
+        "X-User-Id": this.state.userId
       },
       body: JSON.stringify({
         username: username,
@@ -208,7 +152,6 @@ class App extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
         this.setState(prevState => ({
           rooms: {
               ...prevState.rooms,
@@ -221,9 +164,8 @@ class App extends React.Component {
           },
           activeRoom: responseJson.room._id
         }),
-        () => this.callApiRoomMessages(username)
+          () => this.callApiRoomMessages(username)
         )
-        
       })
       .catch(error => {
         console.log(error);

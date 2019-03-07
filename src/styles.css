@@ -38,6 +38,10 @@ body {
   padding: 10px;
 }
 
+.chatPanel .chatPanelInfo > div{
+  cursor: default;
+}
+
 .loggedIn {
   width: 100%;
   height: 100%;

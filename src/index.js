@@ -43,8 +43,10 @@ function onOpen(evt) {
 }
 
 function onMessage(evt) {
-  if(evt.msg === 'ping') {
-    doSend({ "msg": "pong"})
+  console.log(evt);
+  const message = JSON.parse(evt.data);
+  if(message.msg === 'ping') {
+    doSend(JSON.stringify({ "msg": "pong"}))
   }
 }
 

@@ -78,6 +78,9 @@ body {
   margin: 0 10px;
   flex: 5;
 }
+.messageList > div{
+  margin-bottom: 10px;
+}
 .searchBoxContainer {
   margin-bottom: 10px;
 }

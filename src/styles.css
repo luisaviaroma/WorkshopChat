@@ -1,0 +1,86 @@
+body {
+  background: rgb(0, 0, 0, 0.5);
+  padding: 0;
+  margin: 0;
+}
+.Chat {
+  display: flex;
+  background: #ffffff;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+.loginPanel {
+  display: flex;
+  margin: 0 auto;
+  width: 50vw;
+  height: 50vh;
+  justify-content: center;
+  align-items: center;
+}
+.loginPanel .panel_inner {
+  text-align: center;
+}
+.loginPanel .panel_inner form > div{
+  margin-bottom: 10px;
+}
+.loginPanel .panel_inner form input{
+  width: 200px;
+  margin: 0 auto;
+  padding: 10px;
+}
+.submitButton{
+  -webkit-appearance: none;
+  border: 1px solid #000;
+  background: #fff;
+  width: 200px;
+  padding: 10px;
+}
+
+.loggedIn {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+.sidePanel {
+  background-image: linear-gradient(
+    -135deg,
+    #e4e4e4 0%,
+    #f8f8f8 65%,
+    #ffffff 100%
+  );
+  width: 30%;
+  padding: 10px;
+  border-right: 1px solid #efece8;
+}
+.chatPanel {
+  width: 70%;
+  align-content: space-between;
+  justify-content: space-between;
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+}
+.chatList {
+  max-height: calc(100vh - 71px);
+  overflow-y: scroll;
+}
+.chatList > div {
+  margin-bottom: 10px;
+  box-shadow: 0px 0px 10px 0px rgba(51, 51, 51, 0.1);
+}
+.messageList {
+  border-top: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin: 0 10px;
+  flex: 5;
+}
+.searchBoxContainer {
+  margin-bottom: 10px;
+}
+.sendBoxContainer {
+  margin: 10px;
+}

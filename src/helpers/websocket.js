@@ -1,4 +1,4 @@
-const wsUri = 'ws://tower01-it-d:3002/websocket';
+import config from './../config';
 var websocket;
 let sendProgr = 1;
 var sendAuthToken;
@@ -8,11 +8,11 @@ function launchWebSocket(authToken, callback) {
   sendAuthToken = authToken;
   //callback();
   functionCallback = callback;
-  websocket = new WebSocket(wsUri);
-  websocket.onopen = function(evt) {
+  websocket = new WebSocket(config.wsUri);
+  websocket.onopen = function (evt) {
     onOpen(evt);
   };
-  websocket.onmessage = function(evt) {
+  websocket.onmessage = function (evt) {
     onMessage(evt);
   };
 }
@@ -31,11 +31,9 @@ function onOpen(evt) {
   var login = {
     msg: 'method',
     method: 'login',
-    params: [
-      {
-        resume: sendAuthToken
-      }
-    ],
+    params: [{
+      resume: sendAuthToken
+    }],
     id: '' + sendProgr++
   };
 

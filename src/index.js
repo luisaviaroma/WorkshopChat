@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { ChatPreview, SendBox, SearchBox, Message } from '@revh/lab-chat';
 import './styles.css';
 import launchWebSocket from './helpers/websocket';
+import config from './config';
 
 class App extends React.Component {
   state = {
@@ -46,7 +47,7 @@ class App extends React.Component {
 
   callApiLogin = e => {
     e.preventDefault();
-    fetch('http://tower01-it-d:3002/api/v1/login', {
+    fetch(config.apiUri + 'api/v1/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -82,7 +83,7 @@ class App extends React.Component {
   };
 
   checkLoggedinUserInfo = () => {
-    fetch('http://tower01-it-d:3002/api/v1/me', {
+    fetch(config.apiUri + 'api/v1/me', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -100,7 +101,7 @@ class App extends React.Component {
   };
 
   callApiListUser = () => {
-    fetch('http://tower01-it-d:3002/api/v1/users.list', {
+    fetch(config.apiUri + 'api/v1/users.list', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -129,7 +130,7 @@ class App extends React.Component {
     this.setState({
       messageValue: ''
     });
-    fetch('http://tower01-it-d:3002/api/v1/chat.postMessage', {
+    fetch(config.apiUri + 'api/v1/chat.postMessage', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -156,7 +157,7 @@ class App extends React.Component {
   };
 
   callApiRoomMessages = username => {
-    fetch('http://tower01-it-d:3002/api/v1/im.messages?username=' + username, {
+    fetch(config.apiUri + 'api/v1/im.messages?username=' + username, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -183,7 +184,7 @@ class App extends React.Component {
   };
 
   createDirectMessageChat = username => {
-    fetch('http://tower01-it-d:3002/api/v1/im.create', {
+    fetch(config.apiUri + 'api/v1/im.create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -2,8 +2,12 @@ const wsUri = 'ws://tower01-it-d:3002/websocket';
 var websocket;
 let sendProgr = 1;
 var sendAuthToken;
-function launchWebSocket(authToken) {
+var functionCallback;
+
+function launchWebSocket(authToken, callback) {
   sendAuthToken = authToken;
+  //callback();
+  functionCallback = callback;
   websocket = new WebSocket(wsUri);
   websocket.onopen = function(evt) {
     onOpen(evt);
@@ -14,6 +18,7 @@ function launchWebSocket(authToken) {
 }
 
 function doSend(message) {
+  //console.log('doSend', message);
   websocket.send(message);
 }
 
@@ -39,10 +44,17 @@ function onOpen(evt) {
 }
 
 function onMessage(evt) {
-  console.log(evt);
+  //console.log(evt.data);
   const message = JSON.parse(evt.data);
   if (message.msg === 'ping') {
-    doSend(JSON.stringify({ msg: 'pong' }));
+    doSend(
+      JSON.stringify({
+        msg: 'pong'
+      })
+    );
+  }
+  if (message.msg === 'result') {
+    functionCallback();
   }
 }
 

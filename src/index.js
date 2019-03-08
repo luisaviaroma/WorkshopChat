@@ -10,12 +10,14 @@ class App extends React.Component {
     authToken: '',
     userId: '',
     user: '',
+    userStatus: 'offline',
     username: '',
     password: '',
     listUsers: [],
     activeUser: {},
     rooms: {},
-    searchValue: ''
+    searchValue: '',
+    orderByValue: 'nameDESC'
   };
 
   get searchUser() {
@@ -56,7 +58,7 @@ class App extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        //console.log(responseJson);
         this.setState(
           {
             authToken: responseJson.data.authToken,
@@ -64,15 +66,36 @@ class App extends React.Component {
             user: responseJson.data.me.username
           },
           () => {
+            launchWebSocket(
+              responseJson.data.authToken,
+              this.checkLoggedinUserInfo
+            );
             this.callApiListUser();
             this.checkChat();
             this.checkListMessages();
-            launchWebSocket(responseJson.data.authToken);
           }
         );
       })
       .catch(error => {
         console.log(error);
+      });
+  };
+
+  checkLoggedinUserInfo = () => {
+    fetch('http://tower01-it-d:3002/api/v1/me', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Auth-Token': this.state.authToken,
+        'X-User-Id': this.state.userId
+      }
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        //console.log('me', responseJson);
+        this.setState({
+          userStatus: responseJson.status
+        });
       });
   };
 
@@ -87,6 +110,7 @@ class App extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
+        console.log(responseJson);
         this.setState({
           listUsers: responseJson.users
         });
@@ -193,6 +217,53 @@ class App extends React.Component {
       });
   };
 
+  onSelectOrderBy = type => {
+    let arrayToSort = this.state.listUsers;
+    if (type === 'nameDESC') {
+      arrayToSort.sort(function(a, b) {
+        var nameA = a.username.toUpperCase();
+        var nameB = b.username.toUpperCase();
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+    if (type === 'nameASC') {
+      arrayToSort.sort(function(a, b) {
+        var nameA = a.username.toUpperCase();
+        var nameB = b.username.toUpperCase();
+        if (nameA > nameB) {
+          return -1;
+        }
+        if (nameA < nameB) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+    if (type === 'status') {
+      arrayToSort.sort(function(a, b) {
+        var nameA = a.status.toUpperCase();
+        var nameB = b.status.toUpperCase();
+        if (nameA > nameB) {
+          return -1;
+        }
+        if (nameA < nameB) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+    this.setState({
+      listUsers: arrayToSort,
+      orderByValue: type
+    });
+  };
+
   render() {
     return (
       <div className="Chat">
@@ -231,7 +302,10 @@ class App extends React.Component {
           <div className="loggedIn">
             <div className="sidePanel">
               <div className="userInfo">
-                Loggedin as <b>{this.state.user}</b>
+                <span>
+                  Loggedin as <b>{this.state.user}</b>
+                </span>
+                <span className={`userStatus ${this.state.userStatus}`} />
               </div>
               <div className="searchBoxContainer">
                 <SearchBox
@@ -242,6 +316,18 @@ class App extends React.Component {
                     e.preventDefault();
                   }}
                 />
+              </div>
+              <div className="orderBy">
+                <form>
+                  <select
+                    value={this.state.orderByValue}
+                    onChange={e => this.onSelectOrderBy(e.target.value)}
+                  >
+                    <option value="nameDESC">Name DESC</option>
+                    <option value="nameASC">Name ASC</option>
+                    <option value="status">Status</option>
+                  </select>
+                </form>
               </div>
               <div className="chatList">
                 {this.searchUser

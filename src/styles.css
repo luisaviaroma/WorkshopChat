@@ -86,11 +86,29 @@ body {
 }
 
 .userInfo {
-  padding: 10px;
+  padding: 4px 4px 4px 10px;
   background: #bbbbbb;
   color: #4a4a4a;
   border-radius: 4px;
   margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  height: 20px;
+  align-items: center;
+}
+
+.userStatus {
+  display: block;
+  background: #ccc;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid #fff;
+  transition: all .5s ease-in-out;
+}
+
+.userStatus.online {
+  background: #34d859;
 }
 
 .messageList {

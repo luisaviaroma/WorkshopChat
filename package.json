@@ -8,7 +8,7 @@
     "@fortawesome/fontawesome-svg-core": "1.2.12",
     "@fortawesome/free-solid-svg-icons": "5.6.3",
     "@fortawesome/react-fontawesome": "0.1.4",
-    "@revh/lab-chat": "^0.0.20",
+    "@revh/lab-chat": "^0.0.21",
     "moment": "2.23.0",
     "react": "16.5.2",
     "react-dom": "16.5.2",

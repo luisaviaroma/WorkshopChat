@@ -8,7 +8,7 @@ Nel Workshop andremo a sviluppare la UI come da Grafica e poi la integreremo con
 Il Workshop è diviso in 4 Step:
 
 - Montaggio dei Componenti provenienti da una libreria esterna: [lab-chat](https://www.npmjs.com/package/@revh/lab-chat) come da **Grafica**.
-- Implementazione delle Chiamate al Backend: le API messe a disposizione da utilizzare sono definite nella sezione API.
+- Implementazione delle Chiamate al Backend: le API messe a disposizione da utilizzare sono definite nella sezione [API](#api).
 - Implementazione di un nuovo componente UI: in una seconda revisione Grafica è stato aggiunto un componente **Sort By** per filtrare fra gli utenti.
 - Implementazione di un **Test UI** sul Componente Sort By appena creato.
 

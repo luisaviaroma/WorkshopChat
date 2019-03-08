@@ -37,7 +37,6 @@ class App extends React.Component {
   checkListMessages = () => {
     setInterval(() => {
       this.state.listUsers.forEach(user => {
-        //this.createDirectMessageChat(user.username);
         this.updateStatus(user.username);
       });
     }, 1000);
@@ -57,6 +56,7 @@ class App extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
+        console.log(responseJson);
         this.setState(
           {
             authToken: responseJson.data.authToken,
@@ -230,6 +230,9 @@ class App extends React.Component {
         {this.state.authToken && (
           <div className="loggedIn">
             <div className="sidePanel">
+              <div className="userInfo">
+                Loggedin as <b>{this.state.user}</b>
+              </div>
               <div className="searchBoxContainer">
                 <SearchBox
                   placeholder="Seach User"

@@ -218,53 +218,6 @@ class App extends React.Component {
       });
   };
 
-  onSelectOrderBy = type => {
-    let arrayToSort = this.state.listUsers;
-    if (type === 'nameDESC') {
-      arrayToSort.sort(function(a, b) {
-        var nameA = a.username.toUpperCase();
-        var nameB = b.username.toUpperCase();
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      });
-    }
-    if (type === 'nameASC') {
-      arrayToSort.sort(function(a, b) {
-        var nameA = a.username.toUpperCase();
-        var nameB = b.username.toUpperCase();
-        if (nameA > nameB) {
-          return -1;
-        }
-        if (nameA < nameB) {
-          return 1;
-        }
-        return 0;
-      });
-    }
-    if (type === 'status') {
-      arrayToSort.sort(function(a, b) {
-        var nameA = a.status.toUpperCase();
-        var nameB = b.status.toUpperCase();
-        if (nameA > nameB) {
-          return -1;
-        }
-        if (nameA < nameB) {
-          return 1;
-        }
-        return 0;
-      });
-    }
-    this.setState({
-      listUsers: arrayToSort,
-      orderByValue: type
-    });
-  };
-
   render() {
     return (
       <div className="Chat">
@@ -317,18 +270,6 @@ class App extends React.Component {
                     e.preventDefault();
                   }}
                 />
-              </div>
-              <div className="orderBy">
-                <form>
-                  <select
-                    value={this.state.orderByValue}
-                    onChange={e => this.onSelectOrderBy(e.target.value)}
-                  >
-                    <option value="nameDESC">Name DESC</option>
-                    <option value="nameASC">Name ASC</option>
-                    <option value="status">Status</option>
-                  </select>
-                </form>
               </div>
               <div className="chatList">
                 {this.searchUser

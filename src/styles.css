@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Lora|Poppins');
+
 body {
   background: #fff;
   padding: 0;
   margin: 0;
+  font-family: 'Poppins', sans-serif;
 }
 
 .Chat {
@@ -95,6 +98,7 @@ body {
   justify-content: space-between;
   height: 20px;
   align-items: center;
+  font-size: 14px;
 }
 
 .userStatus {
@@ -112,7 +116,7 @@ body {
 }
 
 .messageList {
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #EFECE8;
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -132,5 +136,5 @@ body {
 .sendBoxContainer {
   padding: 10px;
   z-index: 2;
-  box-shadow: 0 -1px 10px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 -1px 5px 0px rgba(0, 0, 0, 0.1);
 }

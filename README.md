@@ -7,14 +7,14 @@ Chat Client sviluppato in React utilizzando le API di [Rocket.Chat](https://rock
 Nel Workshop andremo a sviluppare la UI come da Grafica e poi la integreremo con le API di Rocket.Chat.
 Il Workshop è diviso in 4 Step:
 
-- Montaggio dei Componenti provenienti da una libreria esterna: [lab-chat](https://www.npmjs.com/package/@revh/lab-chat) come da **Grafica**.
-- Implementazione delle Chiamate al Backend: le API messe a disposizione da utilizzare sono definite nella sezione [API](#api).
-- Implementazione di un nuovo componente UI: in una seconda revisione Grafica è stato aggiunto un componente **Sort By** per filtrare fra gli utenti.
-- Implementazione di un **Test UI** sul Componente Sort By appena creato.
+1. Montaggio dei Componenti provenienti da una libreria esterna: [lab-chat](https://www.npmjs.com/package/@revh/lab-chat) come da **Grafica**.
+2. Implementazione delle Chiamate al Backend: le API messe a disposizione da utilizzare sono definite nella sezione [API](#api).
+3. Implementazione di un nuovo componente UI: in una seconda revisione Grafica è stato aggiunto un componente **Sort By** per filtrare fra gli utenti.
+4. Implementazione di un **Test UI** sul Componente Sort By appena creato.
 
 ## Bonus
 
-- Implementare un nuovo componente in TDD partendo da un test che fallisce.
+5. Implementare un nuovo componente in TDD partendo da un test che fallisce.
 
 ---
 

@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.com/luisaviaroma/WorkshopChat.svg?branch=master)](https://travis-ci.com/luisaviaroma/WorkshopChat)
 
+DEMO [https://luisaviaroma.github.io/WorkshopChat/](https://luisaviaroma.github.io/WorkshopChat/)
 # WorkshopChat
 
 Workshop Chat Client

@@ -4,13 +4,14 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withKnobs, text, boolean, number, select, object, date } from '@storybook/addon-knobs';
 
-import { 
-  SampleComponent
-  , SearchBox
+import {
+  SearchBox
   , ChatPreview
   , Message
   , SendBox
 } from '../';
+
+import SampleComponent from '../SampleComponent';
 
 storiesOf('SearchBox', module)
   .addDecorator(withKnobs)

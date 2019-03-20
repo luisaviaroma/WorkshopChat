@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ChatPreview, SendBox, SearchBox, Message } from './ui';
-import './styles.css';
 import launchWebSocket from './helpers/websocket';
 import config from './config';
+import './styles.css';
 
 class App extends React.Component {
   state = {

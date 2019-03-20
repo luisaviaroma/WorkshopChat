@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ChatPreview, SendBox, SearchBox, Message } from '@revh/lab-chat';
+import { ChatPreview, SendBox, SearchBox, Message } from './ui';
 import './styles.css';
 import launchWebSocket from './helpers/websocket';
 import config from './config';

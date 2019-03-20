@@ -1,0 +1,2 @@
+# env variables for testing
+PERCY_TOKEN=<PERCYTOKEN HERE>

@@ -35,7 +35,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "snapshot": "build-storybook && env-cmd ./env/.test percy-storybook --widths=320,1280 --debug",
+    "snapshot": "build-storybook && percy-storybook --widths=320,1280 --debug",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -c .storybook -o storybook-static",
     "predeploy": "yarn build",

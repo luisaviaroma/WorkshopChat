@@ -13,6 +13,7 @@ class App extends Component {
     userStatus: 'offline',
     username: 'lvr_lab_N',
     password: '',
+    showPassword: false,
     listUsers: [],
     activeUser: {},
     rooms: {},
@@ -232,11 +233,16 @@ class App extends Component {
                   />
                 </div>
                 <div>
-                  <input
-                    value={this.state.password}
-                    onChange={e => this.setState({ password: e.target.value })}
-                    type="password"
-                  />
+                  <div className="inputPasswordContainer">
+                    <input
+                      value={this.state.password}
+                      onChange={e => this.setState({ password: e.target.value })}
+                      type={this.state.showPassword ? "text" : "password"}
+                    />
+                    <span className="ShowButtonPassword" onClick={() => this.setState({ showPassword: !this.state.showPassword })}>
+                      {this.state.showPassword ? 'nascondi' : 'mostra'}
+                    </span>
+                  </div>
                 </div>
                 <div>
                   <input

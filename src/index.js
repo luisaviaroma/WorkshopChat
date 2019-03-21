@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { ChatPreview, SendBox, SearchBox, Message } from './ui';
-import launchWebSocket from './helpers/websocket';
-import config from './config';
+import { launchWebSocket, Api } from './helpers';
 import './styles.css';
 
-class App extends React.Component {
+class App extends Component {
   state = {
     messageValue: '',
     authToken: '',
     userId: '',
     user: '',
     userStatus: 'offline',
-    username: '',
+    username: 'lvr_lab_N',
     password: '',
     listUsers: [],
     activeUser: {},
@@ -47,18 +46,12 @@ class App extends React.Component {
 
   callApiLogin = e => {
     e.preventDefault();
-    fetch(config.apiUri + 'api/v1/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user: this.state.username,
-        password: this.state.password
-      })
+    Api.login({ 
+      username: this.state.username, 
+      passoword: this.state.password
     })
-      .then(response => response.json())
       .then(responseJson => {
+        Api.setAuthToken(responseJson.data.authToken);
         //console.log(responseJson);
         this.setState(
           {
@@ -71,7 +64,7 @@ class App extends React.Component {
               responseJson.data.authToken,
               this.checkLoggedinUserInfo
             );
-            this.callApiListUser();
+            this.fetchRooms({ userId: responseJson.data.userId });
             this.checkChat();
             this.checkListMessages();
           }
@@ -83,15 +76,7 @@ class App extends React.Component {
   };
 
   checkLoggedinUserInfo = () => {
-    fetch(config.apiUri + 'api/v1/me', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': this.state.authToken,
-        'X-User-Id': this.state.userId
-      }
-    })
-      .then(response => response.json())
+    Api.fetchUserInfo({ userId: this.state.userId })
       .then(responseJson => {
         //console.log('me', responseJson);
         this.setState({
@@ -101,15 +86,7 @@ class App extends React.Component {
   };
 
   callApiListUser = () => {
-    fetch(config.apiUri + 'api/v1/users.list', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': this.state.authToken,
-        'X-User-Id': this.state.userId
-      }
-    })
-      .then(response => response.json())
+    Api.fetchRooms({ userId: this.state.userId })
       .then(responseJson => {
         console.log(responseJson);
         this.setState({
@@ -126,23 +103,15 @@ class App extends React.Component {
 
   callApiPostMessage = e => {
     e.preventDefault();
-    var msgVal = this.state.messageValue;
+    const { userId, messageValue: message, activeRoom } = this.state;
     this.setState({
       messageValue: ''
     });
-    fetch(config.apiUri + 'api/v1/chat.postMessage', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': this.state.authToken,
-        'X-User-Id': this.state.userId
-      },
-      body: JSON.stringify({
-        roomId: this.state.activeRoom,
-        text: msgVal
-      })
+    Api.sendMessage({
+      userId,
+      message,
+      activeRoom
     })
-      .then(response => response.json())
       .then(responseJson => {
         this.callApiRoomMessages(this.state.activeUser.username);
         this.createDirectMessageChat(this.state.activeUser.username);
@@ -157,15 +126,8 @@ class App extends React.Component {
   };
 
   callApiRoomMessages = username => {
-    fetch(config.apiUri + 'api/v1/im.messages?username=' + username, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': this.state.authToken,
-        'X-User-Id': this.state.userId
-      }
-    })
-      .then(response => response.json())
+    const { userId } = this.state;
+    Api.fetchRoomMessages({ username, userId })
       .then(responseJson => {
         this.setState(prevState => ({
           rooms: {
@@ -184,18 +146,7 @@ class App extends React.Component {
   };
 
   createDirectMessageChat = username => {
-    fetch(config.apiUri + 'api/v1/im.create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': this.state.authToken,
-        'X-User-Id': this.state.userId
-      },
-      body: JSON.stringify({
-        username: username
-      })
-    })
-      .then(response => response.json())
+    Api.createChatWith({ username, userId: this.state.userId })
       .then(responseJson => {
         this.setState(
           prevState => ({

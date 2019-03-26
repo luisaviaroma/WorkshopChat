@@ -12,7 +12,7 @@ class App extends React.Component {
     userId: '',
     user: '',
     userStatus: 'offline',
-    username: '',
+    username: 'lvr_lab_N',
     password: '',
     listUsers: [],
     activeUser: {},

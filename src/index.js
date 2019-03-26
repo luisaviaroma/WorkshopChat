@@ -21,7 +21,13 @@ class App extends React.Component {
     orderByValue: 'nameDESC'
   };
 
-  get searchUser() {}
+  get searchUser() {
+    return this.state.searchValue.length
+      ? this.state.listUsers.filter(user =>
+          user.username.includes(this.state.searchValue)
+        )
+      : this.state.listUsers;
+  }
 
   checkChat = () => {};
 

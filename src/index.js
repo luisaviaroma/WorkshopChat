@@ -21,29 +21,11 @@ class App extends React.Component {
     orderByValue: 'nameDESC'
   };
 
-  get searchUser() {
-    return this.state.searchValue.length
-      ? this.state.listUsers.filter(user =>
-          user.username.includes(this.state.searchValue)
-        )
-      : this.state.listUsers;
-  }
+  get searchUser() {}
 
-  checkChat = () => {
-    setInterval(() => {
-      if (this.state.activeUser.username) {
-        this.callApiRoomMessages(this.state.activeUser.username);
-      }
-    }, 1000);
-  };
+  checkChat = () => {};
 
-  checkListMessages = () => {
-    setInterval(() => {
-      this.state.listUsers.forEach(user => {
-        this.updateStatus(user.username);
-      });
-    }, 1000);
-  };
+  checkListMessages = () => {};
 
   callApiLogin = e => {
     e.preventDefault();
@@ -82,143 +64,27 @@ class App extends React.Component {
       });
   };
 
-  checkLoggedinUserInfo = () => {
-    fetch(config.apiUri + 'api/v1/me', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': this.state.authToken,
-        'X-User-Id': this.state.userId
-      }
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        //console.log('me', responseJson);
-        this.setState({
-          userStatus: responseJson.status
-        });
-      });
-  };
+  checkLoggedinUserInfo = () => {};
 
-  callApiListUser = () => {
-    fetch(config.apiUri + 'api/v1/users.list', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': this.state.authToken,
-        'X-User-Id': this.state.userId
-      }
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log(responseJson);
-        this.setState({
-          listUsers: responseJson.users
-        });
-        responseJson.users.forEach(user => {
-          this.createDirectMessageChat(user.username);
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
+  callApiListUser = () => {};
 
-  callApiPostMessage = e => {
-    e.preventDefault();
-    var msgVal = this.state.messageValue;
-    this.setState({
-      messageValue: ''
-    });
-    fetch(config.apiUri + 'api/v1/chat.postMessage', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': this.state.authToken,
-        'X-User-Id': this.state.userId
-      },
-      body: JSON.stringify({
-        roomId: this.state.activeRoom,
-        text: msgVal
-      })
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        this.callApiRoomMessages(this.state.activeUser.username);
-        this.createDirectMessageChat(this.state.activeUser.username);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
+  callApiPostMessage = e => {};
 
-  updateStatus = username => {
-    this.callApiRoomMessages(username);
-  };
+  callApiRoomMessages = username => {};
 
-  callApiRoomMessages = username => {
-    fetch(config.apiUri + 'api/v1/im.messages?username=' + username, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': this.state.authToken,
-        'X-User-Id': this.state.userId
-      }
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        this.setState(prevState => ({
-          rooms: {
-            ...prevState.rooms,
-            [username]: {
-              ...prevState.rooms[username],
-              lastMessage: responseJson.messages[0],
-              messages: responseJson.messages
-            }
-          }
-        }));
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
-  createDirectMessageChat = username => {
-    fetch(config.apiUri + 'api/v1/im.create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': this.state.authToken,
-        'X-User-Id': this.state.userId
-      },
-      body: JSON.stringify({
-        username: username
-      })
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        this.setState(
-          prevState => ({
-            rooms: {
-              ...prevState.rooms,
-              [username]: {
-                room: responseJson.room._id,
-                username: username,
-                lastMessage: responseJson.room.lastMessage,
-                messages: []
-              }
-            },
-            activeRoom: responseJson.room._id
-          }),
-          () => this.callApiRoomMessages(username)
-        );
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
+  createDirectMessageChat = username => {};
 
   render() {
+    const {
+      username,
+      userStatus,
+      user,
+      searchValue,
+      rooms,
+      activeUser,
+      messageValue
+    } = this.state;
+
     return (
       <div className="Chat">
         {!this.state.authToken && (
@@ -228,7 +94,7 @@ class App extends React.Component {
               <form>
                 <div>
                   <input
-                    value={this.state.username}
+                    value={username}
                     onChange={e => this.setState({ username: e.target.value })}
                     type="text"
                   />
@@ -257,15 +123,15 @@ class App extends React.Component {
             <div className="sidePanel">
               <div className="userInfo">
                 <span>
-                  Loggedin as <b>{this.state.user}</b>
+                  Loggedin as <b>{user}</b>
                 </span>
-                <span className={`userStatus ${this.state.userStatus}`} />
+                <span className={`userStatus ${userStatus}`} />
               </div>
               <div className="searchBoxContainer">
                 <SearchBox
                   placeholder="Seach User"
                   onChange={e => this.setState({ searchValue: e.target.value })}
-                  value={this.state.searchValue}
+                  value={searchValue}
                   onSubmit={e => {
                     e.preventDefault();
                   }}
@@ -273,7 +139,7 @@ class App extends React.Component {
               </div>
               <div className="chatList">
                 {this.searchUser
-                  .filter(user => user.username !== this.state.user)
+                  .filter(user => user.username !== user)
                   .map((user, i) => {
                     return (
                       <ChatPreview
@@ -281,22 +147,19 @@ class App extends React.Component {
                         title={user.username}
                         lastMessage={{
                           message:
-                            this.state.rooms[user.username] &&
-                            this.state.rooms[user.username].lastMessage
-                              ? this.state.rooms[user.username].lastMessage.msg
+                            rooms[user.username] &&
+                            rooms[user.username].lastMessage
+                              ? rooms[user.username].lastMessage.msg
                               : '',
                           time:
-                            this.state.rooms[user.username] &&
-                            this.state.rooms[user.username].lastMessage
-                              ? this.state.rooms[user.username].lastMessage.ts
+                            rooms[user.username] &&
+                            rooms[user.username].lastMessage
+                              ? rooms[user.username].lastMessage.ts
                               : ''
                         }}
                         status={user.status}
-                        active={
-                          this.state.activeUser.username === user.username
-                        }
+                        active={activeUser.username === user.username}
                         onClick={() => {
-                          this.createDirectMessageChat(user.username);
                           this.setState({
                             activeUser: user,
                             messageValue: ''
@@ -308,42 +171,39 @@ class App extends React.Component {
               </div>
             </div>
             <div className="chatPanel">
-              {this.state.activeUser.username && (
+              {activeUser.username && (
                 <div className="chatPanelInfo">
                   <ChatPreview
-                    title={this.state.activeUser.username}
-                    status={this.state.activeUser.status}
+                    title={activeUser.username}
+                    status={activeUser.status}
                     active={false}
                     onClick={() => {}}
                   />
                 </div>
               )}
               <div className="messageList">
-                {this.state.rooms[this.state.activeUser.username] &&
-                  this.state.rooms[this.state.activeUser.username].messages.map(
+                {this.state.rooms[activeUser.username] &&
+                  this.state.rooms[activeUser.username].messages.map(
                     message => {
                       return (
                         <Message
                           key={message._id}
                           message={message.msg}
                           dateMessage={message.ts}
-                          received={
-                            message.u.username ===
-                            this.state.activeUser.username
-                          }
+                          received={message.u.username === activeUser.username}
                         />
                       );
                     }
                   )}
               </div>
-              {this.state.activeUser.username && (
+              {activeUser.username && (
                 <div className="sendBoxContainer">
                   <SendBox
                     placeholder="Insert Message"
                     onChange={e =>
                       this.setState({ messageValue: e.target.value })
                     }
-                    value={this.state.messageValue}
+                    value={messageValue}
                     onSubmit={this.callApiPostMessage}
                   />
                 </div>

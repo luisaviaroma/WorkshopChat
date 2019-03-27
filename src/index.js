@@ -132,7 +132,7 @@ class App extends Component {
 
   callApiRoomMessages = username => {
     const { userId } = this.state;
-    Api.fetchRoomMessages({ username, userId })
+    return Api.fetchRoomMessages({ username, userId })
       .then(responseJson => {
         this.setState(prevState => ({
           rooms: {
@@ -151,7 +151,7 @@ class App extends Component {
   };
 
   createDirectMessageChat = username => {
-    Api.createChatWith({ username, userId: this.state.userId })
+    return Api.createChatWith({ username, userId: this.state.userId })
       .then(responseJson => {
         this.setState(
           prevState => ({

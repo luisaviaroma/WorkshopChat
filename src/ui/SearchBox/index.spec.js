@@ -1,6 +1,14 @@
 import React from 'react';
 import SearchBox, { SearchInput, SearchContainer } from './';
-
+/* 
+    enzyme docs: 
+        - https://airbnb.io/enzyme/docs/api/ 
+*/
+/*
+    jest docs:
+        - https://jestjs.io/
+        - https://jestjs.io/docs/en/expect
+*/
 describe('<SeachBox />', () => {
     it('should call on submit', () => {
         const onChangeMock = jest.fn();

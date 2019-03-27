@@ -12,7 +12,7 @@ class App extends Component {
     user: '',
     userStatus: 'offline',
     username: 'lvr_lab_N',
-    password: '',
+    password: 'lvr_lab_N',
     showPassword: false,
     listUsers: [],
     activeUser: {},
@@ -47,9 +47,10 @@ class App extends Component {
 
   callApiLogin = e => {
     e.preventDefault();
+    console.log(this.state)
     Api.login({ 
       username: this.state.username, 
-      passoword: this.state.password
+      password: this.state.password
     })
       .then(responseJson => {
         Api.setAuthToken(responseJson.data.authToken);
@@ -86,7 +87,7 @@ class App extends Component {
       });
   };
 
-  callApiListUser = () => {
+  fetchRooms = () => {
     Api.fetchRooms({ userId: this.state.userId })
       .then(responseJson => {
         console.log(responseJson);
@@ -228,7 +229,7 @@ class App extends Component {
                 <div>
                   <input
                     value={this.state.username}
-                    onChange={e => this.setState({ username: e.target.value })}
+                    onChange={e => { this.setState({ username: e.target.value }); }  }
                     type="text"
                   />
                 </div>

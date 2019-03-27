@@ -1,0 +1,1 @@
+export { default as loginFixture } from './login.fixture';

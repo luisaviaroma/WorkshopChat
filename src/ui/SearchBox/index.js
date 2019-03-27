@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faSearch);
-
+const noop = () => {}
 export const SearchContainer = styled.form`
   box-sizing: border-box;
   display: flex;
@@ -70,8 +70,8 @@ const SearchBox = ({ placeholder, value, onChange, onSubmit }) => (
 SearchBox.defaultProps = {
   placeholder: '',
   value: '',
-  onChange: () => { },
-  onSubmit: () => { }
+  onChange: noop,
+  onSubmit: noop
 };
 
 export default SearchBox

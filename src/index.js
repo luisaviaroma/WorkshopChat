@@ -45,6 +45,10 @@ class App extends React.Component {
     }, 1000);
   };
 
+  updateStatus = username => {
+    this.callApiRoomMessages(username);
+  };
+
   callApiLogin = e => {
     e.preventDefault();
     fetch(config.apiUri + 'api/v1/login', {
@@ -100,8 +104,10 @@ class App extends React.Component {
       });
   };
 
+  // call api/v1/users.list
   callApiListUser = () => {};
 
+  // call api/v1/chat.postMessage
   callApiPostMessage = e => {};
 
   callApiRoomMessages = username => {

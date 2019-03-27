@@ -47,14 +47,17 @@ class App extends Component {
 
   callApiLogin = e => {
     e.preventDefault();
-    console.log(this.state)
-    Api.login({ 
+    console.log('login', this.state);
+    return Api.login({ 
       username: this.state.username, 
       password: this.state.password
     })
       .then(responseJson => {
+        if (responseJson.error) {
+          console.warn({ responseJson });
+          return;
+        }
         Api.setAuthToken(responseJson.data.authToken);
-        //console.log(responseJson);
         this.setState(
           {
             authToken: responseJson.data.authToken,
@@ -78,7 +81,7 @@ class App extends Component {
   };
 
   checkLoggedinUserInfo = () => {
-    Api.fetchUserInfo({ userId: this.state.userId })
+    return Api.fetchUserInfo({ userId: this.state.userId })
       .then(responseJson => {
         //console.log('me', responseJson);
         this.setState({
@@ -88,7 +91,7 @@ class App extends Component {
   };
 
   fetchRooms = () => {
-    Api.fetchRooms({ userId: this.state.userId })
+    return Api.fetchRooms({ userId: this.state.userId })
       .then(responseJson => {
         console.log(responseJson);
         this.setState({

@@ -9,5 +9,5 @@
 export const PORT = 3001;
 export default {
     apiUri: ` http://10.1.250.13:${PORT}/`,
-    wsUri: `ws://tower01-it-d:${PORT}/websocket`
+    wsUri: `ws:/10.1.250.13:${PORT}/websocket`
 }

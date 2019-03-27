@@ -1,5 +1,8 @@
 import { Api } from './api';
 import { loginFixture } from './fixtures';
+import { apiUri } from '../config';
+// docs for jest-fetch-mock https://www.npmjs.com/package/jest-fetch-mock
+
 describe('should correclty call', () => {
   let api = null;
   beforeEach(() => {
@@ -15,10 +18,14 @@ describe('should correclty call', () => {
   });
 
   it('fetchUserInfo', async () => {
-    // api.setAuthToken('123456');
-    fetch.mockResponse(JSON.stringify({ access_token: '12345' }))
-    const response = await api.fetchUserInfo({ userId: '1234567' });
-    
-    expect(fetch.mock.calls.length).toEqual(1)
+    const response = loginFixture({ status: 'success' });
+    fetch.once(JSON.stringify(response))
+        .once(JSON.stringify({ user_info: { bla: 1 } }))
+
+    const loginResponse = await api.login({ user: 'vergingetorige', password: 'secret' });
+    api.setAuthToken(loginResponse.data.authToken);
+    expect(api.authToken).toEqual(loginResponse.data.authToken);
+    const userInfo = await api.fetchUserInfo({ userId: loginResponse.data.userId });
+    expect(fetch.mock.calls.length).toEqual(2)
   });
 })

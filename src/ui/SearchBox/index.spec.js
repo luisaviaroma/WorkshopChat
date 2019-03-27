@@ -19,6 +19,7 @@ describe('<SeachBox />', () => {
         /** 
          * event does not propagate if you use shallow
          */
+        // console.log(wrapper.debug())
         // input.simulate('keyup', { keyCode: 13, key: 'Enter' });
         input.simulate('submit', { key: 'Enter', keyCode: 13 });
         expect(onSubmitMock).toHaveBeenCalled();

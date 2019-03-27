@@ -14,7 +14,7 @@ function parse(res) {
 function auth(fn, ctx) {
   return function() {
     if (this.authToken === '') {
-      return Promise.resolve(false);
+      return Promise.resolve({ error: true, status: 401, message: 'Unauthorized' });
     }
     return fn.apply(this, arguments); 
   }.bind(ctx);
@@ -41,6 +41,8 @@ export class Api {
    * @param {*} authToken
    * @memberof Api
    */
+
+  // TODO break here the api
   setAuthToken(authToken) {
     this.authToken = authToken;
   }

@@ -29,9 +29,21 @@ class App extends React.Component {
       : this.state.listUsers;
   }
 
-  checkChat = () => {};
+  checkChat = () => {
+    setInterval(() => {
+      if (this.state.activeUser.username) {
+        this.callApiRoomMessages(this.state.activeUser.username);
+      }
+    }, 1000);
+  };
 
-  checkListMessages = () => {};
+  checkListMessages = () => {
+    setInterval(() => {
+      this.state.listUsers.forEach(user => {
+        this.updateStatus(user.username);
+      });
+    }, 1000);
+  };
 
   callApiLogin = e => {
     e.preventDefault();
@@ -70,15 +82,89 @@ class App extends React.Component {
       });
   };
 
-  checkLoggedinUserInfo = () => {};
+  checkLoggedinUserInfo = () => {
+    fetch(config.apiUri + 'api/v1/me', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Auth-Token': this.state.authToken,
+        'X-User-Id': this.state.userId
+      }
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        //console.log('me', responseJson);
+        this.setState({
+          userStatus: responseJson.status
+        });
+      });
+  };
 
   callApiListUser = () => {};
 
   callApiPostMessage = e => {};
 
-  callApiRoomMessages = username => {};
+  callApiRoomMessages = username => {
+    fetch(config.apiUri + 'api/v1/im.messages?username=' + username, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Auth-Token': this.state.authToken,
+        'X-User-Id': this.state.userId
+      }
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState(prevState => ({
+          rooms: {
+            ...prevState.rooms,
+            [username]: {
+              ...prevState.rooms[username],
+              lastMessage: responseJson.messages[0],
+              messages: responseJson.messages
+            }
+          }
+        }));
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
-  createDirectMessageChat = username => {};
+  createDirectMessageChat = username => {
+    fetch(config.apiUri + 'api/v1/im.create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Auth-Token': this.state.authToken,
+        'X-User-Id': this.state.userId
+      },
+      body: JSON.stringify({
+        username: username
+      })
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState(
+          prevState => ({
+            rooms: {
+              ...prevState.rooms,
+              [username]: {
+                room: responseJson.room._id,
+                username: username,
+                lastMessage: responseJson.room.lastMessage,
+                messages: []
+              }
+            },
+            activeRoom: responseJson.room._id
+          }),
+          () => this.callApiRoomMessages(username)
+        );
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   render() {
     const {
@@ -166,6 +252,7 @@ class App extends React.Component {
                         status={user.status}
                         active={activeUser.username === user.username}
                         onClick={() => {
+                          this.createDirectMessageChat(user.username);
                           this.setState({
                             activeUser: user,
                             messageValue: ''

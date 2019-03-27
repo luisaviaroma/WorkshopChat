@@ -12,7 +12,7 @@ class App extends Component {
     user: '',
     userStatus: 'offline',
     username: 'lvr_lab_N',
-    password: '',
+    password: 'lvr_lab_N',
     showPassword: false,
     listUsers: [],
     activeUser: {},
@@ -47,13 +47,17 @@ class App extends Component {
 
   callApiLogin = e => {
     e.preventDefault();
-    Api.login({ 
+    console.log('login', this.state);
+    return Api.login({ 
       username: this.state.username, 
-      passoword: this.state.password
+      password: this.state.password
     })
       .then(responseJson => {
+        if (responseJson.error) {
+          console.warn({ responseJson });
+          return;
+        }
         Api.setAuthToken(responseJson.data.authToken);
-        //console.log(responseJson);
         this.setState(
           {
             authToken: responseJson.data.authToken,
@@ -77,7 +81,7 @@ class App extends Component {
   };
 
   checkLoggedinUserInfo = () => {
-    Api.fetchUserInfo({ userId: this.state.userId })
+    return Api.fetchUserInfo({ userId: this.state.userId })
       .then(responseJson => {
         //console.log('me', responseJson);
         this.setState({
@@ -86,8 +90,8 @@ class App extends Component {
       });
   };
 
-  callApiListUser = () => {
-    Api.fetchRooms({ userId: this.state.userId })
+  fetchRooms = () => {
+    return Api.fetchRooms({ userId: this.state.userId })
       .then(responseJson => {
         console.log(responseJson);
         this.setState({
@@ -128,7 +132,7 @@ class App extends Component {
 
   callApiRoomMessages = username => {
     const { userId } = this.state;
-    Api.fetchRoomMessages({ username, userId })
+    return Api.fetchRoomMessages({ username, userId })
       .then(responseJson => {
         this.setState(prevState => ({
           rooms: {
@@ -147,7 +151,7 @@ class App extends Component {
   };
 
   createDirectMessageChat = username => {
-    Api.createChatWith({ username, userId: this.state.userId })
+    return Api.createChatWith({ username, userId: this.state.userId })
       .then(responseJson => {
         this.setState(
           prevState => ({
@@ -228,7 +232,7 @@ class App extends Component {
                 <div>
                   <input
                     value={this.state.username}
-                    onChange={e => this.setState({ username: e.target.value })}
+                    onChange={e => { this.setState({ username: e.target.value }); }  }
                     type="text"
                   />
                 </div>

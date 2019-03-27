@@ -4,13 +4,35 @@ function parse(res) {
   return res.json();
 }
 
-class Api {
+/**
+ * auth decorator ^_^
+ * 
+ * @param {*} fn - the real function
+ * @param {*} ctx - the this, context
+ * @returns {Function}
+ */
+function auth(fn, ctx) {
+  return function() {
+    if (this.authToken === '') {
+      return Promise.resolve({ error: true, status: 401, message: 'Unauthorized' });
+    }
+    return fn.apply(this, arguments); 
+  }.bind(ctx);
+}
+
+
+export class Api {
   /**
    * Creates an instance of Api.
    * @memberof Api
    */
   constructor() {
     this.authToken = '';
+    this.fetchUserInfo = auth(this.fetchUserInfo, this);
+    this.fetchRooms = auth(this.fetchRooms, this);
+    this.sendMessage = auth(this.sendMessage, this);
+    this.fetchRoomMessages = auth(this.fetchRoomMessages, this);
+    this.createChatWith = auth(this.createChatWith, this);
   }
 
   /**
@@ -19,6 +41,8 @@ class Api {
    * @param {*} authToken
    * @memberof Api
    */
+
+  // TODO break here the api
   setAuthToken(authToken) {
     this.authToken = authToken;
   }
@@ -30,7 +54,7 @@ class Api {
    * @returns
    * @memberof Api
    */
-  login({ user, password }) {
+  login({ username: user, password }) {
     return fetch(`${config.apiUri}api/v1/login`, {
         method: 'POST',
         headers: {
@@ -51,6 +75,7 @@ class Api {
    * @returns
    * @memberof Api
    */
+  
   fetchUserInfo({ userId }) {
     return fetch(`${config.apiUri}api/v1/me`, {
       method: 'GET',
@@ -62,7 +87,6 @@ class Api {
     })
       .then(parse);
   }
-
   /**
    *
    *
@@ -71,7 +95,7 @@ class Api {
    * @memberof Api
    */
   fetchRooms({ userId }) {
-    return fetch(config.apiUri + 'api/v1/users.list', {
+    return fetch(`${config.apiUri}api/v1/users.list`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -89,7 +113,7 @@ class Api {
    * @memberof Api
    */
   sendMessage({ userId, activeRoom, message }) {
-    return fetch(config.apiUri + 'api/v1/chat.postMessage', {
+    return fetch(`${config.apiUri}api/v1/chat.postMessage`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -135,7 +159,7 @@ class Api {
       headers: {
         'Content-Type': 'application/json',
         'X-Auth-Token': this.authToken,
-        'X-User-Id': this.state.userId
+        'X-User-Id': userId
       },
       body: JSON.stringify({
         username: username

@@ -1,4 +1,5 @@
 module.exports = {
+	"automock": false,
 	testURL: 'http://localhost',
 	testPathIgnorePatterns: [
 		'/node_modules/',

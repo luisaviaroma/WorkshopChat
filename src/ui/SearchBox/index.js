@@ -53,7 +53,6 @@ const SearchBox = ({ placeholder, value, onChange, onSubmit }) => (
       <IconContainer>
         <FontAwesomeIcon icon="search" color="#BABBC4" />
       </IconContainer>
-      <span>Useless span</span>
     </label>
 
     <SearchInputContainer>

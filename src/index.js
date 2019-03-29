@@ -100,45 +100,14 @@ class App extends Component {
   };
 
   fetchRooms = () => {
-    return Api.fetchRooms({
-      userId: this.state.userId
-    })
-      .then(responseJson => {
-        console.log(responseJson);
-        this.setState({
-          listUsers: responseJson.users
-        });
-        responseJson.users.forEach(user => {
-          this.createDirectMessageChat(user.username);
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    // ./helpers/api.js > fetchRooms
+    // https://rocket.chat/docs/developer-guides/rest-api/users/list/
   };
 
   callApiPostMessage = e => {
-    e.preventDefault();
-    const { userId, messageValue: message, activeRoom } = this.state;
-    this.setState({
-      messageValue: ''
-    });
-    Api.sendMessage({
-      userId,
-      message,
-      activeRoom
-    })
-      .then(responseJson => {
-        this.callApiRoomMessages(this.state.activeUser.username);
-        this.createDirectMessageChat(this.state.activeUser.username);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    // ./helpers/api.js > sendMessage
+    // https://rocket.chat/docs/developer-guides/rest-api/chat/postmessage/
   };
-
-  // call api/v1/chat.postMessage
-  callApiPostMessage = e => {};
 
   callApiRoomMessages = username => {
     const { userId } = this.state;
@@ -192,7 +161,6 @@ class App extends Component {
 
   render() {
     const {
-      username,
       userStatus,
       user,
       searchValue,
@@ -203,11 +171,10 @@ class App extends Component {
 
     return (
       <div className="Chat">
-        {' '}
         {!this.state.authToken && (
           <div className="loginPanel">
             <div className="panel_inner">
-              <h2> Login </h2>{' '}
+              <h2> Login </h2>
               <form>
                 <div>
                   <input
@@ -219,7 +186,7 @@ class App extends Component {
                     }}
                     type="text"
                   />
-                </div>{' '}
+                </div>
                 <div>
                   <div className="inputPasswordContainer">
                     <input
@@ -230,7 +197,7 @@ class App extends Component {
                         })
                       }
                       type={this.state.showPassword ? 'text' : 'password'}
-                    />{' '}
+                    />
                     <span
                       className="ShowButtonPassword"
                       onClick={() =>
@@ -239,32 +206,31 @@ class App extends Component {
                         })
                       }
                     >
-                      {' '}
-                      {this.state.showPassword ? 'nascondi' : 'mostra'}{' '}
-                    </span>{' '}
-                  </div>{' '}
-                </div>{' '}
+                      {this.state.showPassword ? 'nascondi' : 'mostra'}
+                    </span>
+                  </div>
+                </div>
                 <div>
                   <input
                     className="submitButton"
                     type="submit"
                     value="Accedi"
                     onClick={this.callApiLogin}
-                  />{' '}
-                </div>{' '}
-              </form>{' '}
-            </div>{' '}
+                  />
+                </div>
+              </form>
+            </div>
           </div>
-        )}{' '}
+        )}
         {this.state.authToken && (
           <div className="loggedIn">
             <div className="sidePanel">
               <div className="userInfo">
                 <span>
-                  Loggedin as <b> {user} </b>{' '}
-                </span>{' '}
-                <span className={`userStatus ${userStatus}`} />{' '}
-              </div>{' '}
+                  Loggedin as <b> {user} </b>
+                </span>
+                <span className={`userStatus ${userStatus}`} />
+              </div>
               <div className="searchBoxContainer">
                 <SearchBox
                   placeholder="Seach User"
@@ -277,10 +243,9 @@ class App extends Component {
                   onSubmit={e => {
                     e.preventDefault();
                   }}
-                />{' '}
-              </div>{' '}
+                />
+              </div>
               <div className="chatList">
-                {' '}
                 {this.searchUser
                   .filter(user => user.username !== user)
                   .map((user, i) => {
@@ -311,11 +276,10 @@ class App extends Component {
                         }}
                       />
                     );
-                  })}{' '}
-              </div>{' '}
-            </div>{' '}
+                  })}
+              </div>
+            </div>
             <div className="chatPanel">
-              {' '}
               {activeUser.username && (
                 <div className="chatPanelInfo">
                   <ChatPreview
@@ -323,11 +287,10 @@ class App extends Component {
                     status={activeUser.status}
                     active={false}
                     onClick={() => {}}
-                  />{' '}
+                  />
                 </div>
-              )}{' '}
+              )}
               <div className="messageList">
-                {' '}
                 {this.state.rooms[activeUser.username] &&
                   this.state.rooms[activeUser.username].messages.map(
                     message => {
@@ -340,8 +303,8 @@ class App extends Component {
                         />
                       );
                     }
-                  )}{' '}
-              </div>{' '}
+                  )}
+              </div>
               {activeUser.username && (
                 <div className="sendBoxContainer">
                   <SendBox
@@ -353,12 +316,12 @@ class App extends Component {
                     }
                     value={messageValue}
                     onSubmit={this.callApiPostMessage}
-                  />{' '}
+                  />
                 </div>
-              )}{' '}
-            </div>{' '}
+              )}
+            </div>
           </div>
-        )}{' '}
+        )}
       </div>
     );
   }

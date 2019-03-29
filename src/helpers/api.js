@@ -23,7 +23,8 @@ function auth(fn, ctx) {
 
 export class Api {
   /**
-   * Creates an instance of Api.
+   * Creates an instance of Api. that we'll talk with a Rocket chat instance
+   * https://rocket.chat/docs/developer-guides/rest-api/
    * @memberof Api
    */
   constructor() {
@@ -49,7 +50,7 @@ export class Api {
 
   /**
    *
-   *
+   * https://rocket.chat/docs/developer-guides/rest-api/authentication/login/
    * @param {*} { user, password }
    * @returns
    * @memberof Api
@@ -70,7 +71,7 @@ export class Api {
   
   /**
    *
-   *
+   * https://rocket.chat/docs/developer-guides/rest-api/authentication/me/
    * @param {*} { userId }
    * @returns
    * @memberof Api
@@ -89,7 +90,7 @@ export class Api {
   }
   /**
    *
-   *
+   * https://rocket.chat/docs/developer-guides/rest-api/users/list/
    * @param {*} { userId }
    * @returns
    * @memberof Api
@@ -107,7 +108,7 @@ export class Api {
 
   /**
    *
-   *
+   * https://rocket.chat/docs/developer-guides/rest-api/chat/postmessage/
    * @param {*} { userId, activeRoom, message }
    * @returns
    * @memberof Api
@@ -129,7 +130,7 @@ export class Api {
   
   /**
    *
-   *
+   * https://rocket.chat/docs/developer-guides/rest-api/im/messages/
    * @param {*} { username, userId }
    * @returns
    * @memberof Api
@@ -148,7 +149,7 @@ export class Api {
 
   /**
    *
-   *
+   * https://rocket.chat/docs/developer-guides/rest-api/im/create/
    * @param {*} { username, userId }
    * @returns
    * @memberof Api

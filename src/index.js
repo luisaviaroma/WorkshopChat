@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { ChatPreview, SendBox, SearchBox, Message } from '@revh/lab-chat';
+import { ChatPreview, SendBox, SearchBox, Message } from './ui';
+import { launchWebSocket, Api } from './helpers';
 import './styles.css';
-import launchWebSocket from './helpers/websocket';
-import config from './config';
 
-class App extends React.Component {
+class App extends Component {
   state = {
     messageValue: '',
     authToken: '',
@@ -13,7 +12,12 @@ class App extends React.Component {
     user: '',
     userStatus: 'offline',
     username: 'lvr_lab_N',
+<<<<<<< HEAD
     password: '',
+=======
+    password: 'lvr_lab_N',
+    showPassword: false,
+>>>>>>> d989225fb6547886db6b0112b66e392269a9bc69
     listUsers: [],
     activeUser: {},
     rooms: {},
@@ -51,19 +55,17 @@ class App extends React.Component {
 
   callApiLogin = e => {
     e.preventDefault();
-    fetch(config.apiUri + 'api/v1/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user: this.state.username,
-        password: this.state.password
-      })
+    console.log('login', this.state);
+    return Api.login({ 
+      username: this.state.username, 
+      password: this.state.password
     })
-      .then(response => response.json())
       .then(responseJson => {
-        //console.log(responseJson);
+        if (responseJson.error) {
+          console.warn({ responseJson });
+          return;
+        }
+        Api.setAuthToken(responseJson.data.authToken);
         this.setState(
           {
             authToken: responseJson.data.authToken,
@@ -75,7 +77,7 @@ class App extends React.Component {
               responseJson.data.authToken,
               this.checkLoggedinUserInfo
             );
-            this.callApiListUser();
+            this.fetchRooms({ userId: responseJson.data.userId });
             this.checkChat();
             this.checkListMessages();
           }
@@ -87,15 +89,7 @@ class App extends React.Component {
   };
 
   checkLoggedinUserInfo = () => {
-    fetch(config.apiUri + 'api/v1/me', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': this.state.authToken,
-        'X-User-Id': this.state.userId
-      }
-    })
-      .then(response => response.json())
+    return Api.fetchUserInfo({ userId: this.state.userId })
       .then(responseJson => {
         //console.log('me', responseJson);
         this.setState({
@@ -104,22 +98,53 @@ class App extends React.Component {
       });
   };
 
+<<<<<<< HEAD
   // call api/v1/users.list
   callApiListUser = () => {};
+=======
+  fetchRooms = () => {
+    return Api.fetchRooms({ userId: this.state.userId })
+      .then(responseJson => {
+        console.log(responseJson);
+        this.setState({
+          listUsers: responseJson.users
+        });
+        responseJson.users.forEach(user => {
+          this.createDirectMessageChat(user.username);
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  callApiPostMessage = e => {
+    e.preventDefault();
+    const { userId, messageValue: message, activeRoom } = this.state;
+    this.setState({
+      messageValue: ''
+    });
+    Api.sendMessage({
+      userId,
+      message,
+      activeRoom
+    })
+      .then(responseJson => {
+        this.callApiRoomMessages(this.state.activeUser.username);
+        this.createDirectMessageChat(this.state.activeUser.username);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+>>>>>>> d989225fb6547886db6b0112b66e392269a9bc69
 
   // call api/v1/chat.postMessage
   callApiPostMessage = e => {};
 
   callApiRoomMessages = username => {
-    fetch(config.apiUri + 'api/v1/im.messages?username=' + username, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': this.state.authToken,
-        'X-User-Id': this.state.userId
-      }
-    })
-      .then(response => response.json())
+    const { userId } = this.state;
+    return Api.fetchRoomMessages({ username, userId })
       .then(responseJson => {
         this.setState(prevState => ({
           rooms: {
@@ -138,18 +163,7 @@ class App extends React.Component {
   };
 
   createDirectMessageChat = username => {
-    fetch(config.apiUri + 'api/v1/im.create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Auth-Token': this.state.authToken,
-        'X-User-Id': this.state.userId
-      },
-      body: JSON.stringify({
-        username: username
-      })
-    })
-      .then(response => response.json())
+    return Api.createChatWith({ username, userId: this.state.userId })
       .then(responseJson => {
         this.setState(
           prevState => ({
@@ -192,17 +206,27 @@ class App extends React.Component {
               <form>
                 <div>
                   <input
+<<<<<<< HEAD
                     value={username}
                     onChange={e => this.setState({ username: e.target.value })}
+=======
+                    value={this.state.username}
+                    onChange={e => { this.setState({ username: e.target.value }); }  }
+>>>>>>> d989225fb6547886db6b0112b66e392269a9bc69
                     type="text"
                   />
                 </div>
                 <div>
-                  <input
-                    value={this.state.password}
-                    onChange={e => this.setState({ password: e.target.value })}
-                    type="password"
-                  />
+                  <div className="inputPasswordContainer">
+                    <input
+                      value={this.state.password}
+                      onChange={e => this.setState({ password: e.target.value })}
+                      type={this.state.showPassword ? "text" : "password"}
+                    />
+                    <span className="ShowButtonPassword" onClick={() => this.setState({ showPassword: !this.state.showPassword })}>
+                      {this.state.showPassword ? 'nascondi' : 'mostra'}
+                    </span>
+                  </div>
                 </div>
                 <div>
                   <input

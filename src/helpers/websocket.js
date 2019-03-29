@@ -1,8 +1,5 @@
-import config from './../config';
-var websocket;
-let sendProgr = 1;
-var sendAuthToken;
-var functionCallback;
+import config from '../config';
+let websocket, sendProgr = 1, sendAuthToken, functionCallback;
 
 function launchWebSocket(authToken, callback) {
   sendAuthToken = authToken;

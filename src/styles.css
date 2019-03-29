@@ -138,3 +138,17 @@ body {
   z-index: 2;
   box-shadow: 0 -1px 5px 0px rgba(0, 0, 0, 0.1);
 }
+
+.inputPasswordContainer {
+  position: relative;
+}
+
+.inputPasswordContainer .ShowButtonPassword {
+  position: absolute;
+  transform: translate(-115%, -50%);
+  font-size: 10px;
+  left: 100%;
+  top: 50%;
+  z-index: 1;
+  cursor: pointer;
+}

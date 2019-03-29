@@ -8,6 +8,8 @@ Chat Client sviluppato in React utilizzando le API di [Rocket.Chat](https://rock
 
 ## Step API
 
+[Slides](https://slides.com/leonardolenzi/lvrlab#/0/7)
+
 Implementazione delle Chiamate al Backend: le API messe a disposizione da utilizzare sono definite nella sezione [API](#api).
 
 In questo Step andremo a chiamare le API di Rocket Chat:
@@ -48,3 +50,38 @@ Le API messe a disposizione per questo Workshop sono:
 ### Creazione Messaggio Diretto con un Utente
 
 - api/v1/im.create - [documentazione](https://rocket.chat/docs/developer-guides/rest-api/im/create/)
+
+---
+
+## Esempio Implementazione Codice per la Login
+
+```javascript
+state = {
+  messageValue: '',
+  authToken: '',
+  userId: '',
+  user: '',
+  userStatus: 'offline',
+  username: 'lvr_lab_N',
+  password: 'lvr_lab_N',
+  showPassword: false,
+  listUsers: [],
+  activeUser: {},
+  rooms: {},
+  searchValue: '',
+  orderByValue: 'nameDESC'
+};
+```
+
+```javascript
+fetch(`${config.apiUri}api/v1/login`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    user,
+    password
+  })
+}).then(parse);
+```

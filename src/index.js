@@ -1,7 +1,17 @@
-import React, { Component } from 'react';
+import React, {
+  Component
+} from 'react';
 import ReactDOM from 'react-dom';
-import { ChatPreview, SendBox, SearchBox, Message } from './ui';
-import { launchWebSocket, Api } from './helpers';
+import {
+  ChatPreview,
+  SendBox,
+  SearchBox,
+  Message
+} from './ui';
+import {
+  launchWebSocket,
+  Api
+} from './helpers';
 import './styles.css';
 
 class App extends Component {
@@ -12,12 +22,8 @@ class App extends Component {
     user: '',
     userStatus: 'offline',
     username: 'lvr_lab_N',
-<<<<<<< HEAD
-    password: '',
-=======
     password: 'lvr_lab_N',
     showPassword: false,
->>>>>>> d989225fb6547886db6b0112b66e392269a9bc69
     listUsers: [],
     activeUser: {},
     rooms: {},
@@ -26,11 +32,11 @@ class App extends Component {
   };
 
   get searchUser() {
-    return this.state.searchValue.length
-      ? this.state.listUsers.filter(user =>
-          user.username.includes(this.state.searchValue)
-        )
-      : this.state.listUsers;
+    return this.state.searchValue.length ?
+      this.state.listUsers.filter(user =>
+        user.username.includes(this.state.searchValue)
+      ) :
+      this.state.listUsers;
   }
 
   checkChat = () => {
@@ -56,18 +62,19 @@ class App extends Component {
   callApiLogin = e => {
     e.preventDefault();
     console.log('login', this.state);
-    return Api.login({ 
-      username: this.state.username, 
-      password: this.state.password
-    })
+    return Api.login({
+        username: this.state.username,
+        password: this.state.password
+      })
       .then(responseJson => {
         if (responseJson.error) {
-          console.warn({ responseJson });
+          console.warn({
+            responseJson
+          });
           return;
         }
         Api.setAuthToken(responseJson.data.authToken);
-        this.setState(
-          {
+        this.setState({
             authToken: responseJson.data.authToken,
             userId: responseJson.data.userId,
             user: responseJson.data.me.username
@@ -77,7 +84,9 @@ class App extends Component {
               responseJson.data.authToken,
               this.checkLoggedinUserInfo
             );
-            this.fetchRooms({ userId: responseJson.data.userId });
+            this.fetchRooms({
+              userId: responseJson.data.userId
+            });
             this.checkChat();
             this.checkListMessages();
           }
@@ -89,7 +98,9 @@ class App extends Component {
   };
 
   checkLoggedinUserInfo = () => {
-    return Api.fetchUserInfo({ userId: this.state.userId })
+    return Api.fetchUserInfo({
+        userId: this.state.userId
+      })
       .then(responseJson => {
         //console.log('me', responseJson);
         this.setState({
@@ -98,12 +109,10 @@ class App extends Component {
       });
   };
 
-<<<<<<< HEAD
-  // call api/v1/users.list
-  callApiListUser = () => {};
-=======
   fetchRooms = () => {
-    return Api.fetchRooms({ userId: this.state.userId })
+    return Api.fetchRooms({
+        userId: this.state.userId
+      })
       .then(responseJson => {
         console.log(responseJson);
         this.setState({
@@ -120,15 +129,19 @@ class App extends Component {
 
   callApiPostMessage = e => {
     e.preventDefault();
-    const { userId, messageValue: message, activeRoom } = this.state;
+    const {
+      userId,
+      messageValue: message,
+      activeRoom
+    } = this.state;
     this.setState({
       messageValue: ''
     });
     Api.sendMessage({
-      userId,
-      message,
-      activeRoom
-    })
+        userId,
+        message,
+        activeRoom
+      })
       .then(responseJson => {
         this.callApiRoomMessages(this.state.activeUser.username);
         this.createDirectMessageChat(this.state.activeUser.username);
@@ -137,14 +150,18 @@ class App extends Component {
         console.log(error);
       });
   };
->>>>>>> d989225fb6547886db6b0112b66e392269a9bc69
 
   // call api/v1/chat.postMessage
   callApiPostMessage = e => {};
 
   callApiRoomMessages = username => {
-    const { userId } = this.state;
-    return Api.fetchRoomMessages({ username, userId })
+    const {
+      userId
+    } = this.state;
+    return Api.fetchRoomMessages({
+        username,
+        userId
+      })
       .then(responseJson => {
         this.setState(prevState => ({
           rooms: {
@@ -163,7 +180,10 @@ class App extends Component {
   };
 
   createDirectMessageChat = username => {
-    return Api.createChatWith({ username, userId: this.state.userId })
+    return Api.createChatWith({
+        username,
+        userId: this.state.userId
+      })
       .then(responseJson => {
         this.setState(
           prevState => ({
@@ -197,147 +217,224 @@ class App extends Component {
       messageValue
     } = this.state;
 
-    return (
-      <div className="Chat">
-        {!this.state.authToken && (
-          <div className="loginPanel">
-            <div className="panel_inner">
-              <h2>Login</h2>
-              <form>
-                <div>
-                  <input
-<<<<<<< HEAD
-                    value={username}
-                    onChange={e => this.setState({ username: e.target.value })}
-=======
-                    value={this.state.username}
-                    onChange={e => { this.setState({ username: e.target.value }); }  }
->>>>>>> d989225fb6547886db6b0112b66e392269a9bc69
-                    type="text"
-                  />
-                </div>
-                <div>
-                  <div className="inputPasswordContainer">
-                    <input
-                      value={this.state.password}
-                      onChange={e => this.setState({ password: e.target.value })}
-                      type={this.state.showPassword ? "text" : "password"}
-                    />
-                    <span className="ShowButtonPassword" onClick={() => this.setState({ showPassword: !this.state.showPassword })}>
-                      {this.state.showPassword ? 'nascondi' : 'mostra'}
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <input
-                    className="submitButton"
-                    type="submit"
-                    value="Accedi"
-                    onClick={this.callApiLogin}
-                  />
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
-        {this.state.authToken && (
-          <div className="loggedIn">
-            <div className="sidePanel">
-              <div className="userInfo">
-                <span>
-                  Loggedin as <b>{user}</b>
-                </span>
-                <span className={`userStatus ${userStatus}`} />
-              </div>
-              <div className="searchBoxContainer">
-                <SearchBox
-                  placeholder="Seach User"
-                  onChange={e => this.setState({ searchValue: e.target.value })}
-                  value={searchValue}
-                  onSubmit={e => {
-                    e.preventDefault();
-                  }}
+    return ( <
+      div className = "Chat" > {
+        !this.state.authToken && ( <
+          div className = "loginPanel" >
+          <
+          div className = "panel_inner" >
+          <
+          h2 > Login < /h2> <
+          form >
+          <
+          div >
+          <
+          input value = {
+            this.state.username
+          }
+          onChange = {
+            e => {
+              this.setState({
+                username: e.target.value
+              });
+            }
+          }
+          type = "text" /
+          >
+          <
+          /div> <
+          div >
+          <
+          div className = "inputPasswordContainer" >
+          <
+          input value = {
+            this.state.password
+          }
+          onChange = {
+            e => this.setState({
+              password: e.target.value
+            })
+          }
+          type = {
+            this.state.showPassword ? "text" : "password"
+          }
+          /> <
+          span className = "ShowButtonPassword"
+          onClick = {
+            () => this.setState({
+              showPassword: !this.state.showPassword
+            })
+          } > {
+            this.state.showPassword ? 'nascondi' : 'mostra'
+          } <
+          /span> <
+          /div> <
+          /div> <
+          div >
+          <
+          input className = "submitButton"
+          type = "submit"
+          value = "Accedi"
+          onClick = {
+            this.callApiLogin
+          }
+          /> <
+          /div> <
+          /form> <
+          /div> <
+          /div>
+        )
+      } {
+        this.state.authToken && ( <
+          div className = "loggedIn" >
+          <
+          div className = "sidePanel" >
+          <
+          div className = "userInfo" >
+          <
+          span >
+          Loggedin as < b > {
+            user
+          } < /b> <
+          /span> <
+          span className = {
+            `userStatus ${userStatus}`
+          }
+          /> <
+          /div> <
+          div className = "searchBoxContainer" >
+          <
+          SearchBox placeholder = "Seach User"
+          onChange = {
+            e => this.setState({
+              searchValue: e.target.value
+            })
+          }
+          value = {
+            searchValue
+          }
+          onSubmit = {
+            e => {
+              e.preventDefault();
+            }
+          }
+          /> <
+          /div> <
+          div className = "chatList" > {
+            this.searchUser
+            .filter(user => user.username !== user)
+            .map((user, i) => {
+              return ( <
+                ChatPreview key = {
+                  i
+                }
+                title = {
+                  user.username
+                }
+                lastMessage = {
+                  {
+                    message: rooms[user.username] &&
+                      rooms[user.username].lastMessage ?
+                      rooms[user.username].lastMessage.msg :
+                      '',
+                    time: rooms[user.username] &&
+                      rooms[user.username].lastMessage ?
+                      rooms[user.username].lastMessage.ts :
+                      ''
+                  }
+                }
+                status = {
+                  user.status
+                }
+                active = {
+                  activeUser.username === user.username
+                }
+                onClick = {
+                  () => {
+                    this.createDirectMessageChat(user.username);
+                    this.setState({
+                      activeUser: user,
+                      messageValue: ''
+                    });
+                  }
+                }
                 />
-              </div>
-              <div className="chatList">
-                {this.searchUser
-                  .filter(user => user.username !== user)
-                  .map((user, i) => {
-                    return (
-                      <ChatPreview
-                        key={i}
-                        title={user.username}
-                        lastMessage={{
-                          message:
-                            rooms[user.username] &&
-                            rooms[user.username].lastMessage
-                              ? rooms[user.username].lastMessage.msg
-                              : '',
-                          time:
-                            rooms[user.username] &&
-                            rooms[user.username].lastMessage
-                              ? rooms[user.username].lastMessage.ts
-                              : ''
-                        }}
-                        status={user.status}
-                        active={activeUser.username === user.username}
-                        onClick={() => {
-                          this.createDirectMessageChat(user.username);
-                          this.setState({
-                            activeUser: user,
-                            messageValue: ''
-                          });
-                        }}
-                      />
-                    );
-                  })}
-              </div>
-            </div>
-            <div className="chatPanel">
-              {activeUser.username && (
-                <div className="chatPanelInfo">
-                  <ChatPreview
-                    title={activeUser.username}
-                    status={activeUser.status}
-                    active={false}
-                    onClick={() => {}}
+              );
+            })
+          } <
+          /div> <
+          /div> <
+          div className = "chatPanel" > {
+            activeUser.username && ( <
+              div className = "chatPanelInfo" >
+              <
+              ChatPreview title = {
+                activeUser.username
+              }
+              status = {
+                activeUser.status
+              }
+              active = {
+                false
+              }
+              onClick = {
+                () => {}
+              }
+              /> <
+              /div>
+            )
+          } <
+          div className = "messageList" > {
+            this.state.rooms[activeUser.username] &&
+            this.state.rooms[activeUser.username].messages.map(
+              message => {
+                return ( <
+                  Message key = {
+                    message._id
+                  }
+                  message = {
+                    message.msg
+                  }
+                  dateMessage = {
+                    message.ts
+                  }
+                  received = {
+                    message.u.username === activeUser.username
+                  }
                   />
-                </div>
-              )}
-              <div className="messageList">
-                {this.state.rooms[activeUser.username] &&
-                  this.state.rooms[activeUser.username].messages.map(
-                    message => {
-                      return (
-                        <Message
-                          key={message._id}
-                          message={message.msg}
-                          dateMessage={message.ts}
-                          received={message.u.username === activeUser.username}
-                        />
-                      );
-                    }
-                  )}
-              </div>
-              {activeUser.username && (
-                <div className="sendBoxContainer">
-                  <SendBox
-                    placeholder="Insert Message"
-                    onChange={e =>
-                      this.setState({ messageValue: e.target.value })
-                    }
-                    value={messageValue}
-                    onSubmit={this.callApiPostMessage}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
+                );
+              }
+            )
+          } <
+          /div> {
+            activeUser.username && ( <
+              div className = "sendBoxContainer" >
+              <
+              SendBox placeholder = "Insert Message"
+              onChange = {
+                e =>
+                this.setState({
+                  messageValue: e.target.value
+                })
+              }
+              value = {
+                messageValue
+              }
+              onSubmit = {
+                this.callApiPostMessage
+              }
+              /> <
+              /div>
+            )
+          } <
+          /div> <
+          /div>
+        )
+      } <
+      /div>
     );
   }
 }
 
 const rootElement = document.getElementById('root');
-ReactDOM.render(<App />, rootElement);
+ReactDOM.render( < App / > , rootElement);

@@ -8,7 +8,7 @@ library.add(faPaperclip);
 library.add(faMicrophoneAlt);
 library.add(faPaperPlane);
 
-const MessageContainer = styled.form`
+export const MessageContainer = styled.form`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -21,7 +21,7 @@ const MessageContainer = styled.form`
   opacity: 1;
 `;
 
-const IconContainer = styled.div`
+export const IconContainer = styled.div`
   width: 40px;
   height: 40px;
   color: #B9BBC4;
@@ -37,7 +37,7 @@ const IconContainer = styled.div`
   }
 `;
 
-const IconButtonContainer = styled.div`
+export const IconButtonContainer = styled.div`
   width: 23px;
   height: 23px;
   color: #B9BBC4;
@@ -46,12 +46,12 @@ const IconButtonContainer = styled.div`
   line-height: 15px;
 `;
 
-const MessageInputContainer = styled.div`
+export const MessageInputContainer = styled.div`
   margin-left: 10px;
   flex: 1;
 `;
 
-const MessageInput = styled.input`
+export const MessageInput = styled.input`
   border: none;
   background: none;
   width: 100%;
@@ -115,21 +115,21 @@ const SendBox = ({ placeholder, value, onAttachClick, onChange, onMicClick, onSu
         <FontAwesomeIcon icon="microphone-alt" color="#B9BBC4" />
       </IconContainer>
     </AudioClip>
-    <Button onClick={onSubmit}>
+    <Button type='submit' onClick={onSubmit}>
       <IconButtonContainer>
         <FontAwesomeIcon size="lg" icon="paper-plane" color="#FFFFFF" />
       </IconButtonContainer>
     </Button>
   </MessageContainer>
 );
-
+const noop = () => {}
 SendBox.defaultProps = {
   placeholder: '',
   value: '',
-  onAttachClick: () => { },
-  onMicClick: () => { },
-  onChange: () => { },
-  onSubmit: () => { }
+  onAttachClick: noop,
+  onMicClick: noop,
+  onChange: noop,
+  onSubmit: noop
 };
 
 export default SendBox

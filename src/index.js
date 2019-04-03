@@ -34,7 +34,7 @@ class App extends Component {
       if (this.state.activeUser.username) {
         this.callApiRoomMessages(this.state.activeUser.username);
       }
-    }, 1000);
+    }, 10000);
   };
 
   checkListMessages = () => {
@@ -42,7 +42,7 @@ class App extends Component {
       this.state.listUsers.forEach(user => {
         this.updateStatus(user.username);
       });
-    }, 1000);
+    }, 10000);
   };
 
   updateStatus = username => {
@@ -79,7 +79,7 @@ class App extends Component {
               userId: responseJson.data.userId
             });
             this.checkChat();
-            this.checkListMessages();
+            //this.checkListMessages();
           }
         );
       })

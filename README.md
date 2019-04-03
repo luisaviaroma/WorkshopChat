@@ -8,7 +8,7 @@ Chat Client sviluppato in React utilizzando le API di [Rocket.Chat](https://rock
 
 ## Step API
 
-[Slides](https://slides.com/leonardolenzi/lvrlab#/0/7)
+[Slides](https://slides.com/leonardolenzi/lvrlab#/0/9)
 
 Implementazione delle Chiamate al Backend: le API messe a disposizione da utilizzare sono definite nella sezione [API](#api).
 

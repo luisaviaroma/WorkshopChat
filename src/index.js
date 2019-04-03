@@ -42,14 +42,14 @@ class App extends Component {
       this.state.listUsers.forEach(user => {
         this.updateStatus(user.username);
       });
-    }, 1000);
+    }, 10000);
   };
 
   callApiLogin = e => {
     e.preventDefault();
     console.log('login', this.state);
-    return Api.login({ 
-      username: this.state.username, 
+    return Api.login({
+      username: this.state.username,
       password: this.state.password
     })
       .then(responseJson => {
@@ -71,7 +71,7 @@ class App extends Component {
             );
             this.fetchRooms({ userId: responseJson.data.userId });
             this.checkChat();
-            this.checkListMessages();
+            //this.checkListMessages();
           }
         );
       })
@@ -81,13 +81,14 @@ class App extends Component {
   };
 
   checkLoggedinUserInfo = () => {
-    return Api.fetchUserInfo({ userId: this.state.userId })
-      .then(responseJson => {
+    return Api.fetchUserInfo({ userId: this.state.userId }).then(
+      responseJson => {
         //console.log('me', responseJson);
         this.setState({
           userStatus: responseJson.status
         });
-      });
+      }
+    );
   };
 
   fetchRooms = () => {
@@ -232,7 +233,9 @@ class App extends Component {
                 <div>
                   <input
                     value={this.state.username}
-                    onChange={e => { this.setState({ username: e.target.value }); }  }
+                    onChange={e => {
+                      this.setState({ username: e.target.value });
+                    }}
                     type="text"
                   />
                 </div>
@@ -240,10 +243,19 @@ class App extends Component {
                   <div className="inputPasswordContainer">
                     <input
                       value={this.state.password}
-                      onChange={e => this.setState({ password: e.target.value })}
-                      type={this.state.showPassword ? "text" : "password"}
+                      onChange={e =>
+                        this.setState({ password: e.target.value })
+                      }
+                      type={this.state.showPassword ? 'text' : 'password'}
                     />
-                    <span className="ShowButtonPassword" onClick={() => this.setState({ showPassword: !this.state.showPassword })}>
+                    <span
+                      className="ShowButtonPassword"
+                      onClick={() =>
+                        this.setState({
+                          showPassword: !this.state.showPassword
+                        })
+                      }
+                    >
                       {this.state.showPassword ? 'nascondi' : 'mostra'}
                     </span>
                   </div>

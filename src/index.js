@@ -34,7 +34,7 @@ class App extends Component {
       if (this.state.activeUser.username) {
         this.callApiRoomMessages(this.state.activeUser.username);
       }
-    }, 10000);
+    }, 1000);
   };
 
   checkListMessages = () => {

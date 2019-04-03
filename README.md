@@ -16,6 +16,12 @@ Prima di iniziare assicurati di avere almeno almeno la version 10 di Node instal
 E anche il package manager Yarn anche se opzionale
 - Yarn [https://yarnpkg.com/lang/en/](https://yarnpkg.com/lang/en/)
 
+## Slides
+
+- https://slides.com/leonardolenzi/lvrlab/
+- https://slides.com/stefanosbanchi/deck/
+- https://slides.com/pasqualemangialavori/lvrlab-2/
+
 ## Step 0
 
 ```

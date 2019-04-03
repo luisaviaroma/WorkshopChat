@@ -35,7 +35,7 @@ Nel Workshop andremo a sviluppare la UI come da Grafica e poi la integreremo con
 Il Workshop è diviso in 4 Step:
 
 1. Montaggio dei Componenti come da **Grafica**. [Step 1](https://github.com/luisaviaroma/WorkshopChat/tree/step1)
-2. Implementazione di un **Test UI** sul Componente Sort By appena creato.
+2. Implementazione di un **Test UI** sul Componente Sort By appena creato. [step-tests](https://github.com/luisaviaroma/WorkshopChat/tree/step-tests)
 3. Implementazione delle Chiamate al Backend: le API messe a disposizione da utilizzare sono definite nella sezione [API](#api). [StepAPI](https://github.com/luisaviaroma/WorkshopChat/tree/stepAPI)
 
 ## Bonus

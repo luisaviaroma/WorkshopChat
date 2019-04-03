@@ -6,7 +6,7 @@ Chat Client sviluppato in React utilizzando le API di [Rocket.Chat](https://rock
 
 ## Step 1
 
-[Slides Workshop](https://slides.com/leonardolenzi/lvrlab#/0/4)
+[Slides Workshop](https://slides.com/leonardolenzi/lvrlab#/0/5)
 
 Montaggio dei Componenti provenienti da una libreria esterna: [lab-chat](https://www.npmjs.com/package/@revh/lab-chat) come da [**Grafica**](#grafica).
 

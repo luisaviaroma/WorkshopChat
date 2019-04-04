@@ -11,19 +11,18 @@ import SendBox, { MessageInput } from './';
 */
 
 function createEvent(params) {
-    let eventMock = {
+    return {
         preventDefault: jest.fn(),
         stopPropagation: jest.fn(),
         ...params
     };
-    return eventMock;
 }
 
 describe('<SendBox />', () => {
     beforeEach(() => {
 
     });
-    it.only('should call all functions', () => {
+    it('should call all functions', () => {
         const onChangeMock = jest.fn();
         const onSubmitMock = jest.fn();
         const onAttachClick = jest.fn();
@@ -43,12 +42,13 @@ describe('<SendBox />', () => {
         let mockedEvent = createEvent({ target: { value: 'qualcosa altro' }});
         
         let input = wrapper.find(MessageInput)
-        console.log(input.debug());
+        // console.log(input.debug());
         // here is missing somenthing
         // use .simulate to trigger events
         // https://airbnb.io/enzyme/docs/api/ShallowWrapper/simulate.html
-        // input.simulate('change', { target: { value: 'qualcosa' } });
-        expect(onChangeMock).toHaveBeenCalledWith(mockedEvent);
+        let eventMocked = createEvent({ target: { value: 'qualcosa' } })
+        // add here input.simulate...
+        expect(onChangeMock).toHaveBeenCalled();
         expect(mockedEvent.preventDefault).not.toHaveBeenCalled();
         expect(mockedEvent.stopPropagation).not.toHaveBeenCalled();
     });
@@ -68,7 +68,7 @@ describe('<SendBox />', () => {
                 onSubmit={onSubmitMock}
             />);
         
-        expect(onChangeMock).toHaveBeenCalledWith();
+        expect(onChangeMock).toHaveBeenCalled();
     });
 
     it('should meet accessibility guidelines and snapshot', async () => {

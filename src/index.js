@@ -278,60 +278,19 @@ class App extends Component {
                 <span className={`userStatus ${this.state.userStatus}`} />
               </div>
               <div className="searchBoxContainer">
-                <SearchBox
-                  placeholder="Seach User"
-                  onChange={e => this.setState({ searchValue: e.target.value })}
-                  value={this.state.searchValue}
-                  onSubmit={e => {
-                    e.preventDefault();
-                  }}
-                />
+                {/* TODO Insert here the search box */}
               </div>
               <div className="orderBy">
                 <form>
-                  <select
-                    value={this.state.orderByValue}
-                    onChange={e => this.onSelectOrderBy(e.target.value)}
-                  >
-                    <option value="nameDESC">Name DESC</option>
-                    <option value="nameASC">Name ASC</option>
-                    <option value="status">Status</option>
-                  </select>
+                  {/* TODO Insert here the order by select */}
                 </form>
               </div>
               <div className="chatList">
                 {this.searchUser
                   .filter(user => user.username !== this.state.user)
                   .map((user, i) => {
-                    return (
-                      <ChatPreview
-                        key={i}
-                        title={user.username}
-                        lastMessage={{
-                          message:
-                            this.state.rooms[user.username] &&
-                            this.state.rooms[user.username].lastMessage
-                              ? this.state.rooms[user.username].lastMessage.msg
-                              : '',
-                          time:
-                            this.state.rooms[user.username] &&
-                            this.state.rooms[user.username].lastMessage
-                              ? this.state.rooms[user.username].lastMessage.ts
-                              : ''
-                        }}
-                        status={user.status}
-                        active={
-                          this.state.activeUser.username === user.username
-                        }
-                        onClick={() => {
-                          this.createDirectMessageChat(user.username);
-                          this.setState({
-                            activeUser: user,
-                            messageValue: ''
-                          });
-                        }}
-                      />
-                    );
+                    {/* TODO Insert here the chat preview */}
+                    return null;
                   })}
               </div>
             </div>
@@ -350,30 +309,14 @@ class App extends Component {
                 {this.state.rooms[this.state.activeUser.username] &&
                   this.state.rooms[this.state.activeUser.username].messages.map(
                     message => {
-                      return (
-                        <Message
-                          key={message._id}
-                          message={message.msg}
-                          dateMessage={message.ts}
-                          received={
-                            message.u.username ===
-                            this.state.activeUser.username
-                          }
-                        />
-                      );
+                      {/* TODO Insert here the messages */}
+                      return null;
                     }
                   )}
               </div>
               {this.state.activeUser.username && (
                 <div className="sendBoxContainer">
-                  <SendBox
-                    placeholder="Insert Message"
-                    onChange={e =>
-                      this.setState({ messageValue: e.target.value })
-                    }
-                    value={this.state.messageValue}
-                    onSubmit={this.callApiPostMessage}
-                  />
+                  {/* TODO Insert here the sendbox */}
                 </div>
               )}
             </div>

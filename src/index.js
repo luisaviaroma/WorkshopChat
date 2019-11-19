@@ -65,10 +65,6 @@ class App extends Component {
             user: responseJson.data.me.username
           },
           () => {
-            launchWebSocket(
-              responseJson.data.authToken,
-              this.checkLoggedinUserInfo
-            );
             this.fetchRooms({ userId: responseJson.data.userId });
             this.checkChat();
             //this.checkListMessages();
